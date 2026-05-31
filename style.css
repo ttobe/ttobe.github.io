@@ -342,11 +342,22 @@ code.inline {
   body { background: #fff; font-size: 11pt; }
   .topnav { display: none; }
   .pf-doc { max-width: none; padding: 0; margin: 0; box-shadow: none; }
-  .pf-section { padding: 18px 0; break-inside: avoid; }
-  .pf-case, .pf-proj-block, .pf-table, .pf-code, .pf-callout, .pf-metrics, .pf-metric { break-inside: avoid; }
+
+  /* 주요 섹션은 새 페이지에서 시작 (경력은 헤더와 함께 1페이지) */
+  #work, #projects, #experience { break-before: page; }
+  .pf-section { padding: 18px 0 0; border-top: none; }
+
+  /* 제목은 바로 뒤 본문과 분리되지 않게 */
+  .pf-section-head, .pf-case-head, .pf-proj-bar { break-after: avoid; }
+
+  /* 들어가면 통째로 유지, 넘치면 아래 '원자 단위'에서만 분할 */
+  .pf-case, .pf-job { break-inside: avoid; }
+
+  /* 절대 중간에서 잘리면 안 되는 단위 (문단·표·코드·카드 등) */
+  .pf-case-block, .pf-table, .pf-code, .pf-callout, .pf-metrics, .pf-metric,
+  .pf-review, .pf-mini-row, .pf-duty { break-inside: avoid; }
+
   .pf-metric { background: #fff; border-color: #d6d9df; }
-  .pf-proj-block { break-before: auto; }
-  #projects { break-before: page; }
   .pf-code-bar { background: #eef0f4; color: #555; border-bottom: 1px solid #ddd; }
   .pf-code-dots { display: none; }
   .pf-code pre { background: #f6f7f9; color: #1b1f24; border: 1px solid #e2e5ec; border-top: 0; white-space: pre-wrap; }
