@@ -343,7 +343,8 @@ code.inline {
   .topnav { display: none; }
   .pf-doc { max-width: none; padding: 0; margin: 0; box-shadow: none; }
 
-  /* 강제 페이지 분할 없음 — 들어갈 수 있으면 한 페이지에 여러 케이스를 채움 */
+  /* 주요 섹션은 새 페이지에서 시작(섹션끼리 분리), 섹션 내부 케이스는 패킹 */
+  #work, #projects, #experience { break-before: page; }
   .pf-section { padding: 16px 0 0; border-top: none; }
 
   /* 인쇄 밀도 — 글자·줄간격·여백을 줄여 케이스가 한 페이지에 들어가도록 */
