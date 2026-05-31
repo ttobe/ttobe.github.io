@@ -301,9 +301,6 @@ code.inline {
 .pf-proj-cases .pf-case-title { font-size: 19px; }
 .pf-proj-cases .pf-case-head { margin-bottom: 16px; }
 
-/* ---------- Writing ---------- */
-.pf-writing { display: flex; flex-direction: column; gap: 16px; }
-
 /* ---------- Experience / Education ---------- */
 .pf-extra { display: grid; grid-template-columns: 1.4fr 1fr; gap: 36px; }
 .pf-extra-label { font-size: 14px; color: var(--muted); font-family: var(--font-mono); letter-spacing: 0.04em; margin-bottom: 14px; }
