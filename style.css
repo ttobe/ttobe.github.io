@@ -378,6 +378,9 @@ code.inline {
   .pf-code code { font-size: 8.5px; line-height: 1.25; }
   .pf-projmeta { font-size: 11px; }
   .pf-job-summary { font-size: 11px; }
+  .pf-callout { padding: 8px 12px; gap: 9px; }
+  .pf-callout .ic { font-size: 14px; }
+  .pf-callout .txt { font-size: 11px; }
   .pf-cases { gap: 20px; }
   .pf-case + .pf-case { padding-top: 20px; }
   .pf-proj-cases { gap: 16px; margin-top: 14px; }
