@@ -343,9 +343,38 @@ code.inline {
   .topnav { display: none; }
   .pf-doc { max-width: none; padding: 0; margin: 0; box-shadow: none; }
 
-  /* 주요 섹션은 새 페이지에서 시작 (경력은 헤더와 함께 1페이지) */
-  #work, #projects, #experience { break-before: page; }
-  .pf-section { padding: 18px 0 0; border-top: none; }
+  /* 강제 페이지 분할 없음 — 들어갈 수 있으면 한 페이지에 여러 케이스를 채움 */
+  .pf-section { padding: 16px 0 0; border-top: none; }
+
+  /* 인쇄 밀도 — 글자·줄간격·여백을 줄여 케이스가 한 페이지에 들어가도록 */
+  body { font-size: 10pt; }
+  .pf-section-head { margin-bottom: 14px; }
+  .pf-case-head { margin-bottom: 12px; }
+  .pf-case-title { font-size: 18px; }
+  .pf-case-sub { font-size: 12.5px; margin-top: 4px; }
+  .pf-case-body { gap: 12px; }
+  .pf-case-block { gap: 14px; }
+  .pf-block-body > * + * { margin-top: 6px; }
+  .pf-block-body p { font-size: 12.5px; line-height: 1.5; }
+  .pf-checklist { margin-top: 7px; gap: 4px; }
+  .pf-checklist li { font-size: 12.5px; line-height: 1.45; }
+  .pf-metrics { margin-bottom: 14px; gap: 10px; }
+  .pf-metric { padding: 11px 14px; }
+  .pf-metric-value { font-size: 23px; }
+  .pf-metric-label { margin-top: 5px; font-size: 12px; }
+  .pf-metric-note { font-size: 10.5px; }
+  .pf-quote { padding: 8px 13px; font-size: 12px; line-height: 1.5; }
+  .pf-table { font-size: 11.5px; }
+  .pf-table th, .pf-table td { padding: 5px 10px; }
+  .pf-table caption { padding-bottom: 5px; }
+  .pf-review { margin-top: 12px; padding: 11px 15px; }
+  .pf-review p { font-size: 12.5px; line-height: 1.5; }
+  .pf-code code { font-size: 11px; line-height: 1.5; }
+  .pf-cases { gap: 20px; }
+  .pf-case + .pf-case { padding-top: 20px; }
+  .pf-proj-cases { gap: 16px; margin-top: 14px; }
+  .pf-proj-cases .pf-case + .pf-case { padding-top: 16px; }
+  .pf-proj-block + .pf-proj-block { padding-top: 22px; }
 
   /* 제목은 바로 뒤 본문과 분리되지 않게 */
   .pf-section-head, .pf-case-head, .pf-proj-bar { break-after: avoid; }
