@@ -132,7 +132,8 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: var(--line-tight); }
   border: 1px solid var(--accent); color: var(--accent); border-radius: 999px;
   background: transparent; white-space: nowrap;
 }
-.pf-stack { margin-top: 22px; }
+.pf-stack { margin-top: 22px; gap: 6px; }
+.pf-stack li { font-size: 11px; padding: 5px 9px; white-space: nowrap; }
 
 /* ---------- Sections ---------- */
 .pf-section { padding: 38px 0; border-top: 1px solid var(--border); scroll-margin-top: 64px; }
@@ -263,7 +264,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: var(--line-tight); }
 }
 .pf-code-dots { display: inline-flex; gap: 6px; }
 .pf-code-dots i { width: 10px; height: 10px; border-radius: 50%; background: #3a4257; display: inline-block; }
-.pf-code-file { flex: 1; color: #cdd4e2; }
+.pf-code-file { flex: 1; color: #cdd4e2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pf-code-lang { color: #6b7488; text-transform: uppercase; letter-spacing: 0.08em; font-size: 11px; }
 .pf-code pre { margin: 0; background: var(--code-bg); color: var(--code-fg); padding: 18px; overflow-x: auto; }
 .pf-code code { font-family: var(--font-mono); font-size: 13px; line-height: 1.65; white-space: pre; }
@@ -337,40 +338,46 @@ code.inline {
 
 /* ---------- Print (PDF) ---------- */
 @media print {
-  @page { margin: 14mm; }
+  @page { margin: 11mm; }
   html { scroll-behavior: auto; }
   body { background: #fff; font-size: 11pt; }
   .topnav { display: none; }
   .pf-doc { max-width: none; padding: 0; margin: 0; box-shadow: none; }
 
-  /* 주요 섹션은 새 페이지에서 시작(섹션끼리 분리), 섹션 내부 케이스는 패킹 */
-  #work, #projects, #experience { break-before: page; }
-  .pf-section { padding: 16px 0 0; border-top: none; }
+  /* 경험·학력만 새 페이지로 분리, 나머지는 흐르며 패킹(페이지 절약) */
+  #experience { break-before: page; }
+  .pf-section { padding: 14px 0 0; border-top: none; }
 
   /* 인쇄 밀도 — 글자·줄간격·여백을 줄여 케이스가 한 페이지에 들어가도록 */
-  body { font-size: 10pt; }
-  .pf-section-head { margin-bottom: 14px; }
-  .pf-case-head { margin-bottom: 12px; }
-  .pf-case-title { font-size: 18px; }
-  .pf-case-sub { font-size: 12.5px; margin-top: 4px; }
-  .pf-case-body { gap: 12px; }
-  .pf-case-block { gap: 14px; }
-  .pf-block-body > * + * { margin-top: 6px; }
-  .pf-block-body p { font-size: 12.5px; line-height: 1.5; }
-  .pf-checklist { margin-top: 7px; gap: 4px; }
-  .pf-checklist li { font-size: 12.5px; line-height: 1.45; }
-  .pf-metrics { margin-bottom: 14px; gap: 10px; }
-  .pf-metric { padding: 11px 14px; }
-  .pf-metric-value { font-size: 23px; }
-  .pf-metric-label { margin-top: 5px; font-size: 12px; }
-  .pf-metric-note { font-size: 10.5px; }
-  .pf-quote { padding: 8px 13px; font-size: 12px; line-height: 1.5; }
-  .pf-table { font-size: 11.5px; }
-  .pf-table th, .pf-table td { padding: 5px 10px; }
-  .pf-table caption { padding-bottom: 5px; }
-  .pf-review { margin-top: 12px; padding: 11px 15px; }
-  .pf-review p { font-size: 12.5px; line-height: 1.5; }
-  .pf-code code { font-size: 11px; line-height: 1.5; }
+  body { font-size: 9.5pt; }
+  .pf-section-head { margin-bottom: 11px; }
+  .pf-case-head { margin-bottom: 9px; }
+  .pf-case-title { font-size: 16px; }
+  .pf-case-sub { font-size: 11px; margin-top: 3px; }
+  .pf-case-body { gap: 8px; }
+  /* 라벨 칸을 줄여 본문 가로폭을 넓힘(줄 수↓) */
+  .pf-case-block { grid-template-columns: 62px 1fr; gap: 12px; }
+  .pf-block-label { font-size: 11px; }
+  .pf-block-body > * + * { margin-top: 4px; }
+  .pf-block-body p { font-size: 11px; line-height: 1.4; }
+  .pf-checklist { margin-top: 5px; gap: 3px; }
+  .pf-checklist li { font-size: 11px; line-height: 1.32; padding-left: 16px; }
+  .pf-metrics { margin-bottom: 8px; gap: 8px; }
+  .pf-metric { padding: 7px 12px; }
+  .pf-metric-value { font-size: 18px; }
+  .pf-metric-label { margin-top: 3px; font-size: 11px; }
+  .pf-metric-note { font-size: 10px; }
+  .pf-quote { padding: 6px 11px; font-size: 10.5px; line-height: 1.4; }
+  .pf-table { font-size: 10px; }
+  .pf-table th, .pf-table td { padding: 2px 7px; }
+  .pf-table caption { padding-bottom: 2px; }
+  .pf-review { margin-top: 7px; padding: 7px 12px; }
+  .pf-review p { font-size: 11px; line-height: 1.4; }
+  .pf-code-bar { padding: 3px 10px; font-size: 10px; }
+  .pf-code pre { padding: 6px 10px; }
+  .pf-code code { font-size: 8.5px; line-height: 1.25; }
+  .pf-projmeta { font-size: 11px; }
+  .pf-job-summary { font-size: 11px; }
   .pf-cases { gap: 20px; }
   .pf-case + .pf-case { padding-top: 20px; }
   .pf-proj-cases { gap: 16px; margin-top: 14px; }
@@ -389,7 +396,8 @@ code.inline {
   .pf-review, .pf-mini-row, .pf-duty { break-inside: avoid; }
 
   .pf-metric { background: #fff; border-color: #d6d9df; }
-  .pf-code-bar { background: #eef0f4; color: #555; border-bottom: 1px solid #ddd; }
+  .pf-code-bar { background: #eef0f4; color: #444; border-bottom: 1px solid #ddd; }
+  .pf-code-file { color: #1b1f24; }
   .pf-code-dots { display: none; }
   .pf-code pre { background: #f6f7f9; color: #1b1f24; border: 1px solid #e2e5ec; border-top: 0; white-space: pre-wrap; }
   a { color: var(--fg); }

@@ -46,8 +46,18 @@ CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
   "file://$PWD/index.html"
 ```
 
-- `@page { size: A4; margin: 14mm }`, `#projects`는 `break-before: page`. 현재 약 13페이지.
-- 변경 검증용 스크린샷도 같은 방식(`--screenshot=...`, `_shot/`은 gitignore)으로 확인.
+- 변경 검증용 스크린샷도 같은 방식(`--screenshot=...`, `_shot/`은 gitignore)으로 확인. 페이지 확인은 PDF를 직접 페이지 단위로 열어본다.
+
+### PDF 페이지네이션 규칙 (`@media print`)
+
+목표: **요소가 페이지 중간에서 어색하게 잘리지 않게**, 그리고 **들어갈 수 있으면 한 페이지에 여러 케이스를 채운다**(빈 공간 최소화). 모든 규칙은 `style.css`의 `@media print` 안에 있다.
+
+- **여백·밀도**: `@page { margin: 12mm }`. 인쇄 전용으로 본문/표/코드/메트릭 글자·줄간격·여백을 화면보다 줄여 케이스가 한 페이지에 들어가도록 압축한다(본문 `~11.5px`, line-height `1.4~1.45`). 내용이 늘면 이 값들을 더 조여 페이지 수를 억제한다.
+- **섹션 분리**: `#experience`만 `break-before: page`로 새 페이지 시작(경험·학력이 프로젝트와 안 섞이게). 나머지 섹션(경력·주요 업무·프로젝트)은 강제 분할하지 않고 자연스럽게 흐르며 패킹한다.
+- **제목 보호**: `.pf-section-head`, `.pf-case-head`, `.pf-proj-bar`, `.pf-projmeta`, 프로젝트 `.pf-tags`에 `break-after: avoid` → 섹션/케이스 제목·프로젝트 인트로(이름·메타·태그)가 본문/첫 서브케이스와 분리돼 페이지 끝에 혼자 남지 않는다.
+- **통째 유지 시도**: `.pf-case`, `.pf-job`, `.pf-extra`, `.pf-extra-col`에 `break-inside: avoid` → 들어가면 통째로, 넘치면 아래 단위에서만 분할.
+- **절대 안 잘리는 단위**: `.pf-case-block`(문단 묶음), `.pf-table`, `.pf-code`, `.pf-callout`, `.pf-metrics`/`.pf-metric`, `.pf-review`, `.pf-mini-row`, `.pf-duty`에 `break-inside: avoid` → 문단·표·코드·카드 중간이 절대 잘리지 않는다.
+- **트레이드오프**: 통째 유지 때문에 다음 케이스가 안 들어가면 페이지 하단에 여백이 생길 수 있다(중간 잘림보다 이쪽을 택함). 검증은 PDF를 페이지별로 열어 ① 제목만 남은 페이지 없는지 ② 문단·표 중간 잘림 없는지 ③ 들어갈 수 있는데 다음 장으로 밀린 케이스 없는지 본다.
 
 ## 배포 / 검증
 

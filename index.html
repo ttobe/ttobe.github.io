@@ -402,6 +402,14 @@
                                                     >user_engagement</code
                                                 >
                                             </li>
+                                            <li>
+                                                1초 이내에
+                                                <code class="inline"
+                                                    >user_engagement</code
+                                                >
+                                                이벤트가 감지되면 활성 사용자로
+                                                간주
+                                            </li>
                                         </ul>
                                         <p>
                                             반면 서버는
@@ -459,242 +467,6 @@
                         <article class="pf-case" id="case-03">
                             <header class="pf-case-head">
                                 <span class="pf-case-no">CASE 03</span>
-                                <h3 class="pf-case-title">
-                                    어뷰징 탐지용 사용자 클러스터링
-                                </h3>
-                                <p class="pf-case-sub">
-                                    계정 간 관계를 Union-Find로 묶어 다계정 어뷰징
-                                    탐지
-                                </p>
-                            </header>
-                            <div class="pf-metrics">
-                                <div class="pf-metric">
-                                    <div class="pf-metric-value">30,000+</div>
-                                    <div class="pf-metric-label">어뷰징 차단</div>
-                                    <div class="pf-metric-note">누적 차단 계정</div>
-                                </div>
-                            </div>
-                            <div class="pf-case-body">
-                                <div class="pf-case-block">
-                                    <h4 class="pf-block-label">배경</h4>
-                                    <div class="pf-block-body">
-                                        <p>
-                                            <strong
-                                                >다계정 생성을 통한 리워드 부정
-                                                적립</strong
-                                            >
-                                            어뷰징을 탐지해야 했습니다. 의심되는
-                                            계정들을 하나의 집단으로 묶어,
-                                            주기적으로 클러스터를 업데이트하며 어뷰징
-                                            의심 집단을 블락하는 시스템이
-                                            필요했습니다.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="pf-case-block">
-                                    <h4 class="pf-block-label">의사결정 1</h4>
-                                    <div class="pf-block-body">
-                                        <p class="pf-lead">
-                                            계정 간 관계 클러스터링을 Union-Find로
-                                            구현
-                                        </p>
-                                        <p>
-                                            계정 간 관계는
-                                            <strong
-                                                >그래프 자체의 방향성이 필요
-                                                없었습니다.</strong
-                                            >
-                                            "같은 집단인지"와 "집단의 인원 수"만
-                                            파악하면 됐기에
-                                            <strong>Union-Find</strong>를
-                                            선택했습니다.
-                                        </p>
-                                        <figure class="pf-table-wrap">
-                                            <table class="pf-table">
-                                                <caption>
-                                                    자료구조 비교 — 증분
-                                                    업데이트와 DB 부하 관점
-                                                </caption>
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col"></th>
-                                                        <th scope="col">
-                                                            Union-Find
-                                                        </th>
-                                                        <th scope="col">
-                                                            BFS/DFS
-                                                        </th>
-                                                        <th scope="col">
-                                                            Graph DB
-                                                        </th>
-                                                        <th scope="col">
-                                                            재귀 CTE
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <th scope="row">
-                                                            증분 업데이트
-                                                        </th>
-                                                        <td class="hl">
-                                                            ≈ O(1)/edge
-                                                        </td>
-                                                        <td>불가</td>
-                                                        <td>재계산 필요</td>
-                                                        <td>불가</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">
-                                                            전체 재계산
-                                                        </th>
-                                                        <td class="hl">≈ O(N)</td>
-                                                        <td>O(N+E)</td>
-                                                        <td>O(N+E)</td>
-                                                        <td>O(N·E)</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">
-                                                            DB 쿼리(증분)
-                                                        </th>
-                                                        <td class="hl">
-                                                            2R + 1 batch W
-                                                        </td>
-                                                        <td>N/A</td>
-                                                        <td>1W + 1R</td>
-                                                        <td>N/A</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">
-                                                            메모리
-                                                        </th>
-                                                        <td class="hl">O(N)</td>
-                                                        <td>O(N+E)</td>
-                                                        <td>DB 내부</td>
-                                                        <td>DB 내부</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </figure>
-                                    </div>
-                                </div>
-
-                                <div class="pf-case-block">
-                                    <h4 class="pf-block-label">의사결정 2</h4>
-                                    <div class="pf-block-body">
-                                        <p class="pf-lead">증분 적재 + 배치 처리</p>
-                                        <ul class="pf-checklist">
-                                            <li>
-                                                직전 시간에 새로 발생한 계정 간
-                                                관계를 클러스터에
-                                                <strong>증분 적재</strong>
-                                            </li>
-                                            <li>
-                                                크기가
-                                                <strong>일정 규모 이상인 클러스터</strong
-                                                >에 대해 검증 및 처리(블락)
-                                            </li>
-                                        </ul>
-                                        <p>
-                                            <strong
-                                                >실시간 증분 적재를 하지 않는
-                                                이유</strong
-                                            >
-                                            ① 동시성 문제 — 거의 동시에 들어오는
-                                            관계는 커밋 타이밍에 따라 하나여야 할
-                                            클러스터가 잘못 분리될 수 있습니다.
-                                        </p>
-                                        <figure class="pf-code">
-                                            <figcaption class="pf-code-bar">
-                                                <span
-                                                    class="pf-code-dots"
-                                                    aria-hidden="true"
-                                                    ><i></i><i></i><i></i
-                                                ></span>
-                                                <span class="pf-code-file"
-                                                    >동시성으로 클러스터가 분리되는
-                                                    시나리오</span
-                                                >
-                                                <span class="pf-code-lang"
-                                                    >text</span
-                                                >
-                                            </figcaption>
-                                            <pre><code>실제: A→B, C→B, D→C (거의 동시)
-기대: {A, B, C, D} 하나의 클러스터
-
-실제 발생 가능:
-  T1: A→B 처리 → {A, B}
-  T2: C→B 처리 → {A, B, C}
-  T3: D→C 처리 → C 조회 시 T2 미커밋 → {D, C} 별도 생성
-  결과: {A,B,C}와 {D,C}로 분리되거나 userId 중복 에러</code></pre>
-                                        </figure>
-                                        <p>
-                                            ② 외부 API 의존 — 블락 판단에 외부 API
-                                            호출·처리가 필요해 실시간 블락에는
-                                            적합하지 않습니다.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="pf-case-block">
-                                    <h4 class="pf-block-label">트러블슈팅</h4>
-                                    <div class="pf-block-body">
-                                        <p class="pf-lead">
-                                            배치 재구축의 멱등성(determinism) 확보
-                                        </p>
-                                        <p>
-                                            cron은 매 실행마다 기존 클러스터를
-                                            메모리에서 처음부터 다시 구축합니다.
-                                            그런데 두 트리의
-                                            <strong
-                                                >rank가 같을 때 루트를 정하는
-                                                규칙이 비결정적</strong
-                                            >이라, 같은 데이터를 넣어도 실행할
-                                            때마다 루트(clusterId)가 바뀌는 문제가
-                                            있었습니다.
-                                        </p>
-                                        <ul class="pf-checklist">
-                                            <li>
-                                                union의
-                                                <strong
-                                                    >tie-break를 결정적으로
-                                                    고정</strong
-                                                >해, 같은 입력이면 항상 같은
-                                                clusterId가 나오도록
-                                                <strong>멱등성</strong>을 확보
-                                            </li>
-                                            <li>
-                                                두 클러스터를 합칠 때 한쪽이라도
-                                                차단 상태면 합쳐진 클러스터 전체로
-                                                <strong>차단 여부를 전파</strong>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <blockquote class="pf-review">
-                                <p>
-                                    알고리즘을 문제 풀이에서만 다뤄봤지,
-                                    <strong
-                                        >실제 서비스 코드에 직접 적용한 것은 이번이
-                                        처음</strong
-                                    >이었습니다. Union-Find 하나를 고르는 데에도
-                                    인프라 비용·DB 커넥션·동시성·배치 멱등성처럼
-                                    고려할 것이 훨씬 많았고,
-                                    <strong
-                                        >운영 환경과 제약을 함께 고민하며 설계하는
-                                        과정</strong
-                                    >이 새롭고 즐거웠습니다.
-                                </p>
-                            </blockquote>
-                        </article>
-
-                        <!-- Case 04 -->
-                        <article class="pf-case" id="case-04">
-                            <header class="pf-case-head">
-                                <span class="pf-case-no">CASE 04</span>
                                 <h3 class="pf-case-title">
                                     업무 요청 방식 개선
                                 </h3>
@@ -836,6 +608,260 @@
                                     <strong>글로벌 캐시워크에 도입</strong>해, 흩어진
                                     요청을 한곳에서 추적하고 우선순위를 함께
                                     합의하는 흐름으로 운영하고 있습니다.
+                                </p>
+                            </blockquote>
+                        </article>
+
+                        <!-- Case 04 -->
+                        <article class="pf-case" id="case-04">
+                            <header class="pf-case-head">
+                                <span class="pf-case-no">CASE 04</span>
+                                <h3 class="pf-case-title">
+                                    어뷰징 탐지용 사용자 클러스터링
+                                </h3>
+                                <p class="pf-case-sub">
+                                    계정 간 관계를 Union-Find로 묶어 다계정 어뷰징
+                                    탐지
+                                </p>
+                            </header>
+                            <div class="pf-metrics">
+                                <div class="pf-metric">
+                                    <div class="pf-metric-value">30,000+</div>
+                                    <div class="pf-metric-label">어뷰징 차단</div>
+                                    <div class="pf-metric-note">누적 차단 계정</div>
+                                </div>
+                            </div>
+                            <div class="pf-case-body">
+                                <div class="pf-case-block">
+                                    <h4 class="pf-block-label">배경</h4>
+                                    <div class="pf-block-body">
+                                        <p>
+                                            <strong
+                                                >다계정 생성을 통한 리워드 부정
+                                                적립</strong
+                                            >
+                                            어뷰징을 탐지해야 했습니다. 의심되는
+                                            계정들을 하나의 집단으로 묶어,
+                                            주기적으로 클러스터를 업데이트하며 어뷰징
+                                            의심 집단을 블락하는 시스템이
+                                            필요했습니다.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="pf-case-block">
+                                    <h4 class="pf-block-label">의사결정 1</h4>
+                                    <div class="pf-block-body">
+                                        <p class="pf-lead">
+                                            계정 간 관계 클러스터링을 Union-Find로
+                                            구현
+                                        </p>
+                                        <p>
+                                            계정 간 관계는
+                                            <strong
+                                                >그래프 자체의 방향성이 필요
+                                                없었습니다.</strong
+                                            >
+                                            "같은 집단인지"와 "집단의 인원 수"만
+                                            파악하면 됐기에 다음 이유로
+                                            <strong>Union-Find</strong>를
+                                            선택했습니다.
+                                        </p>
+                                        <ul class="pf-checklist">
+                                            <li>
+                                                <strong>Graph DB</strong> — 별도
+                                                인프라 추가가 필요
+                                            </li>
+                                            <li>
+                                                <strong>BFS/DFS</strong> — 전체
+                                                관계 테이블과 인접 리스트를 매번
+                                                로드해야 하고, 메모리에 들고 있기도
+                                                애매
+                                            </li>
+                                            <li>
+                                                <strong>재귀 CTE</strong> — MySQL
+                                                8.0의 재귀 깊이 제한·성능 문제가
+                                                있고, 일본 캐시워크 특성상 DB 쿼리가
+                                                길어지면 connection이 부족해 다른
+                                                요청이 오래 대기할 수 있음
+                                            </li>
+                                        </ul>
+                                        <figure class="pf-table-wrap">
+                                            <table class="pf-table">
+                                                <caption>
+                                                    자료구조 비교 — 증분
+                                                    업데이트와 DB 부하 관점
+                                                </caption>
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col"></th>
+                                                        <th scope="col">
+                                                            Union-Find
+                                                        </th>
+                                                        <th scope="col">
+                                                            BFS/DFS
+                                                        </th>
+                                                        <th scope="col">
+                                                            Graph DB
+                                                        </th>
+                                                        <th scope="col">
+                                                            재귀 CTE
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">
+                                                            증분 업데이트
+                                                        </th>
+                                                        <td class="hl">
+                                                            ≈ O(1)/edge
+                                                        </td>
+                                                        <td>불가</td>
+                                                        <td>재계산 필요</td>
+                                                        <td>불가</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">
+                                                            전체 재계산
+                                                        </th>
+                                                        <td class="hl">≈ O(N)</td>
+                                                        <td>O(N+E)</td>
+                                                        <td>O(N+E)</td>
+                                                        <td>O(N·E)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">
+                                                            DB 쿼리(증분)
+                                                        </th>
+                                                        <td class="hl">
+                                                            2R + 1 batch W
+                                                        </td>
+                                                        <td>N/A</td>
+                                                        <td>1W + 1R</td>
+                                                        <td>N/A</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">
+                                                            메모리
+                                                        </th>
+                                                        <td class="hl">O(N)</td>
+                                                        <td>O(N+E)</td>
+                                                        <td>DB 내부</td>
+                                                        <td>DB 내부</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </figure>
+                                    </div>
+                                </div>
+
+                                <div class="pf-case-block">
+                                    <h4 class="pf-block-label">의사결정 2</h4>
+                                    <div class="pf-block-body">
+                                        <p class="pf-lead">증분 적재 + 배치 처리</p>
+                                        <ul class="pf-checklist">
+                                            <li>
+                                                직전 시간에 새로 발생한 계정 간
+                                                관계를 클러스터에
+                                                <strong>증분 적재</strong>
+                                            </li>
+                                            <li>
+                                                크기가
+                                                <strong>일정 규모 이상인 클러스터</strong
+                                                >에 대해 검증 및 처리(블락)
+                                            </li>
+                                        </ul>
+                                        <p>
+                                            <strong
+                                                >실시간 증분 적재를 하지 않는
+                                                이유</strong
+                                            >
+                                            ① 동시성 문제 — 거의 동시에 들어오는
+                                            관계는 커밋 타이밍에 따라 하나여야 할
+                                            클러스터가 잘못 분리될 수 있습니다.
+                                        </p>
+                                        <figure class="pf-code">
+                                            <figcaption class="pf-code-bar">
+                                                <span
+                                                    class="pf-code-dots"
+                                                    aria-hidden="true"
+                                                    ><i></i><i></i><i></i
+                                                ></span>
+                                                <span class="pf-code-file"
+                                                    >클러스터 분리 시나리오</span
+                                                >
+                                                <span class="pf-code-lang"
+                                                    >text</span
+                                                >
+                                            </figcaption>
+                                            <pre><code>실제: A→B, C→B, D→C (거의 동시)
+기대: {A, B, C, D} 하나의 클러스터
+실제 발생 가능:
+  T1: A→B 처리 → {A, B}
+  T2: C→B 처리 → {A, B, C}
+  T3: D→C 처리 → C 조회 시 T2 미커밋 → {D, C} 별도 생성
+  결과: {A,B,C}와 {D,C}로 분리되거나 userId 중복 에러</code></pre>
+                                        </figure>
+                                        <p>
+                                            ② 외부 API 의존 — 블락 판단에 외부 API
+                                            호출·처리가 필요해 실시간 블락에는
+                                            적합하지 않습니다.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="pf-case-block">
+                                    <h4 class="pf-block-label">트러블슈팅</h4>
+                                    <div class="pf-block-body">
+                                        <p class="pf-lead">
+                                            배치 재구축의 멱등성(determinism) 확보
+                                        </p>
+                                        <p>
+                                            cron은 매 실행마다 기존 클러스터를
+                                            메모리에서 처음부터 다시 구축합니다.
+                                            그런데 두 트리의
+                                            <strong
+                                                >rank가 같을 때 루트를 정하는
+                                                규칙이 비결정적</strong
+                                            >이라, 같은 데이터를 넣어도 실행할
+                                            때마다 루트(clusterId)가 바뀌는 문제가
+                                            있었습니다. clusterId가 흔들리면 차단
+                                            이력 등 후속 데이터와의 매칭이 깨집니다.
+                                        </p>
+                                        <ul class="pf-checklist">
+                                            <li>
+                                                union의
+                                                <strong
+                                                    >tie-break를 결정적으로
+                                                    고정</strong
+                                                >해, 같은 입력이면 항상 같은
+                                                clusterId가 나오도록
+                                                <strong>멱등성</strong>을 확보
+                                            </li>
+                                            <li>
+                                                두 클러스터를 합칠 때 한쪽이라도
+                                                차단 상태면 합쳐진 클러스터 전체로
+                                                <strong>차단 여부를 전파</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <blockquote class="pf-review">
+                                <p>
+                                    알고리즘을 문제 풀이에서만 다뤄봤지,
+                                    <strong
+                                        >실제 서비스 코드에 직접 적용한 것은 이번이
+                                        처음</strong
+                                    >이었습니다. Union-Find 하나를 고르는 데에도
+                                    인프라 비용·DB 커넥션·동시성·배치 멱등성처럼
+                                    고려할 것이 훨씬 많았고,
+                                    <strong
+                                        >운영 환경과 제약을 함께 고민하며 설계하는
+                                        과정</strong
+                                    >이 새롭고 즐거웠습니다.
                                 </p>
                             </blockquote>
                         </article>
@@ -1087,6 +1113,14 @@
                                                                 </td>
                                                                 <td>40%</td>
                                                                 <td>40%</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">
+                                                                    성공 요청 수
+                                                                </th>
+                                                                <td>22,661</td>
+                                                                <td>72,616</td>
+                                                                <td>64,854</td>
                                                             </tr>
                                                             <tr>
                                                                 <th scope="row">
@@ -1396,6 +1430,24 @@
                                                     정해진 간격마다 요청을
                                                     보냈습니다.
                                                 </p>
+                                                <ul class="pf-checklist">
+                                                    <li>
+                                                        <strong>디바운싱</strong> —
+                                                        입력이 끝나야 요청 →
+                                                        실시간성과 맞지 않음
+                                                    </li>
+                                                    <li>
+                                                        <strong>쓰로틀링</strong> —
+                                                        정해진 간격마다 요청 →
+                                                        실시간성 보장
+                                                    </li>
+                                                    <li>
+                                                        메시지 큐·토큰 방식도
+                                                        검토했으나, 요청 제한·비용이
+                                                        없어 쓰로틀링으로 많은 요청을
+                                                        보내는 방향 선택
+                                                    </li>
+                                                </ul>
                                                 <div class="pf-callout">
                                                     <span class="ic">📉</span>
                                                     <span class="txt">
@@ -1495,6 +1547,18 @@
                                                     효율적인 범위 쿼리를
                                                     구성했습니다.
                                                 </p>
+                                                <ul class="pf-checklist">
+                                                    <li>
+                                                        최근 6개월 데이터를 빠르게
+                                                        조회
+                                                    </li>
+                                                    <li>
+                                                        <strong>Sorted Set</strong>:
+                                                        날짜를 score, ID를 value로
+                                                        저장 → 정렬되어 효율적인 범위
+                                                        쿼리·개수 계산 가능
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
                                         <div class="pf-case-block">
