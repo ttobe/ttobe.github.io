@@ -376,11 +376,12 @@ code.inline {
   .pf-proj-cases .pf-case + .pf-case { padding-top: 16px; }
   .pf-proj-block + .pf-proj-block { padding-top: 22px; }
 
-  /* 제목은 바로 뒤 본문과 분리되지 않게 */
-  .pf-section-head, .pf-case-head, .pf-proj-bar { break-after: avoid; }
+  /* 제목·프로젝트 인트로(이름·메타·태그)는 바로 뒤 본문/첫 케이스와 분리되지 않게 */
+  .pf-section-head, .pf-case-head, .pf-proj-bar,
+  .pf-projmeta, .pf-proj-block .pf-tags { break-after: avoid; }
 
   /* 들어가면 통째로 유지, 넘치면 아래 '원자 단위'에서만 분할 */
-  .pf-case, .pf-job { break-inside: avoid; }
+  .pf-case, .pf-job, .pf-extra, .pf-extra-col { break-inside: avoid; }
 
   /* 절대 중간에서 잘리면 안 되는 단위 (문단·표·코드·카드 등) */
   .pf-case-block, .pf-table, .pf-code, .pf-callout, .pf-metrics, .pf-metric,
