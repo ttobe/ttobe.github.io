@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            html,
+            body {
+                width: 1200px;
+                height: 630px;
+            }
+            body {
+                font-family: "Noto Sans KR", sans-serif;
+                background: #eceef2;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .card {
+                position: relative;
+                width: 1120px;
+                height: 550px;
+                background: #fff;
+                border-radius: 20px;
+                padding: 72px 80px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                overflow: hidden;
+                box-shadow: 0 1px 0 #e3e6ec;
+            }
+            .accent-bar {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 10px;
+                height: 100%;
+                background: #2f54eb;
+            }
+            .top {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+            }
+            .badge {
+                font-family: "JetBrains Mono", monospace;
+                font-weight: 700;
+                font-size: 22px;
+                color: #2f54eb;
+                border: 1.5px solid #2f54eb;
+                border-radius: 8px;
+                padding: 6px 14px;
+            }
+            .top .muted {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 22px;
+                color: #8a93a6;
+                letter-spacing: 1px;
+            }
+            .mid {
+                display: flex;
+                flex-direction: column;
+                gap: 18px;
+            }
+            .name {
+                font-size: 92px;
+                font-weight: 800;
+                color: #1b1f2a;
+                letter-spacing: -2px;
+                line-height: 1;
+            }
+            .name .en {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 34px;
+                font-weight: 500;
+                color: #8a93a6;
+                margin-left: 22px;
+                letter-spacing: 0;
+            }
+            .role {
+                font-size: 34px;
+                font-weight: 700;
+                color: #2f54eb;
+            }
+            .tagline {
+                font-size: 30px;
+                font-weight: 400;
+                color: #4b5263;
+                line-height: 1.45;
+            }
+            .bottom {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 24px;
+                color: #8a93a6;
+            }
+            .tags {
+                display: flex;
+                gap: 10px;
+            }
+            .tag {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 20px;
+                font-weight: 500;
+                color: #4b5263;
+                background: #f3f5f9;
+                border: 1px solid #e3e6ec;
+                border-radius: 999px;
+                padding: 7px 16px;
+            }
+            .url {
+                color: #2f54eb;
+                font-weight: 700;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <span class="accent-bar"></span>
+            <div class="top">
+                <span class="badge">황</span>
+                <span class="muted">PORTFOLIO · BACKEND</span>
+            </div>
+            <div class="mid">
+                <div class="name">황진혁<span class="en">Hwang Jinhyuk</span></div>
+                <div class="role">Backend Developer</div>
+            </div>
+            <div class="bottom">
+                <div class="tags">
+                    <span class="tag">NestJS</span>
+                    <span class="tag">Spring</span>
+                    <span class="tag">TypeScript</span>
+                    <span class="tag">MySQL</span>
+                    <span class="tag">AWS</span>
+                </div>
+                <span class="url">ttobe.github.io</span>
+            </div>
+        </div>
+    </body>
+</html>
